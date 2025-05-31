@@ -1,4 +1,3 @@
-# main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import router as api_router
@@ -12,16 +11,14 @@ app = FastAPI(
     description="Upload videos, extract frames, compute visual features, and search similar frames"
 )
 
-# Enable CORS (optional, if you have a frontend)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace with your frontend domain in production
+    allow_origins=["*"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Include API routes
 app.include_router(api_router)
 
 

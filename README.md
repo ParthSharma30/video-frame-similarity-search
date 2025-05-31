@@ -144,7 +144,7 @@ Check the health status of the service and database connectivity.
 ## Project Structure
 
 ```
-VIDEO-FRAME-SIMILE/
+VIDEO-FRAME-SIMILARITY SEARCH/
 ├── api/
 │   └── routes.py            # FastAPI route definitions
 ├── core/

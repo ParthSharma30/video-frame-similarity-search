@@ -1,4 +1,3 @@
-# app/core/video_processor.py
 import cv2
 import os
 import uuid
@@ -19,10 +18,6 @@ def get_file_size_mb(file_path: str) -> float:
 
 
 def extract_frames(video_path: str, interval: float) -> List[Tuple[str, float]]:
-    """
-    Extracts frames from the video at the given interval (in seconds).
-    Returns a list of tuples: (frame_image_path, timestamp)
-    """
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
         raise ValueError("Cannot open video file.")

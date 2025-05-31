@@ -1,4 +1,3 @@
-# app/api/routes.py
 import os
 import shutil
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException, status
@@ -27,14 +26,14 @@ async def upload_video(
     file: UploadFile = File(...),
     interval: float = Form(default=1.0)
 ):
-    # Validate file format
+
     if not video_processor.is_supported_format(file.filename):
         raise HTTPException(status_code=400, detail="Unsupported file format. Only MP4, AVI, MOV are allowed.")
 
-    # Generate unique video ID
+
     video_id = Path(file.filename).stem + "_" + datetime.now().strftime("%Y%m%d%H%M%S")
     
-    # Ensure video directory exists
+
     save_dir = Path(settings.VIDEO_DIR)
     save_dir.mkdir(parents=True, exist_ok=True)
     
@@ -46,7 +45,7 @@ async def upload_video(
     except Exception as e:
         raise HTTPException(status_code=500, detail="Failed to save uploaded file.")
 
-    # Validate size
+
     if video_processor.get_file_size_mb(str(save_path)) > settings.MAX_FILE_SIZE_MB:
         os.remove(save_path)
         raise HTTPException(status_code=400, detail="File too large. Limit is 500MB.")
@@ -57,7 +56,6 @@ async def upload_video(
         os.remove(save_path)
         raise HTTPException(status_code=422, detail=f"Frame extraction failed: {str(e)}")
 
-    # Process frames and compute vectors
     frame_vectors = []
     for image_path, timestamp in frames:
         try:
@@ -73,7 +71,7 @@ async def upload_video(
                 "payload": payload
             })
         except Exception as e:
-            continue  # skip bad frame
+            continue
 
     if not frame_vectors:
         raise HTTPException(status_code=500, detail="No valid frames could be processed.")
@@ -92,7 +90,6 @@ async def upload_video(
 
 @router.post("/search", response_model=List[schema.SimilarFrameResult])
 async def search_similar_frames(query: schema.SimilarityQuery):
-    # Validate input vector length
     if len(query.vector) != settings.VECTOR_DIM:
         raise HTTPException(
             status_code=400,
